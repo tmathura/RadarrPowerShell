@@ -2,6 +2,7 @@ $expected_eventtype = 'Download'
 $search_text_1 = 'lama'
 $search_text_2 = 'rarbg'
 $search__sub_text_2 = '265'
+$search_text_3 = 'psa'
 $doApiCall = $false;
 
 #$env:radarr_eventtype = 'Download'
@@ -15,6 +16,11 @@ if ($env:radarr_eventtype -eq $expected_eventtype) {
 
   if ($env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($search_text_1))) {
     ('{0} - Search text 1 ''' + $search_text_1 + ''' found') -f (Get-Date) | Out-File -FilePath C:\radarr_unmonitor.txt -Append
+    $doApiCall = $true;
+  }
+
+  if ($env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($search_text_3))) {
+    ('{0} - Search text 1 ''' + $search_text_3 + ''' found') -f (Get-Date) | Out-File -FilePath C:\radarr_unmonitor.txt -Append
     $doApiCall = $true;
   }
 
