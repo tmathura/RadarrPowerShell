@@ -1,6 +1,10 @@
 $expected_eventtype='Download'
 $search_text_1='lama'
 
+#$env:radarr_eventtype='Download'
+#$env:radarr_moviefile_relativepath='Cloverfield.2008.1080p.BluRay.x265-LAMA.mp4'
+#$env:radarr_movie_id=1821
+
 ('{0} - In event '''+$env:radarr_eventtype+''' for movie file '''+$env:radarr_moviefile_relativepath+'''') -f (Get-Date) | Out-File -FilePath C:\radarr_unmonitor.txt -Append
 
 if ($env:radarr_eventtype -eq $expected_eventtype)
