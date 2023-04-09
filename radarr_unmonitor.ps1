@@ -12,6 +12,7 @@ $log_file = ('{0}\raddarr_powershell.log') -f ($PSScriptRoot)
 
 if ($env:radarr_eventtype -eq $expected_eventtype) {
   ('{0} - In expected event ''' + $expected_eventtype + '''') -f (Get-Date) | Out-File -FilePath $log_file -Append
+  ('{0} - File size ''' + $env:radarr_release_size + '''') -f (Get-Date) | Out-File -FilePath $log_file -Append
 
   for ( $index = 0; $index -lt $release_groups.count; $index++)
   {
