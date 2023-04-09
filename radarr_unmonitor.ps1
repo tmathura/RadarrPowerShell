@@ -1,6 +1,8 @@
 $expected_eventtype = 'Download'
-$release_groups = @('lama','rarbg','psa')
-$quality = '265'
+$release_groups = @('lama', 'rarbg', 'psa')
+$qualities = @('265')
+$release_groups_optional = @('yify')
+$qualities_optional = @('264')
 $doApiCall = $false;
 $log_file = ('{0}\raddarr_powershell.log') -f ($PSScriptRoot)
 
@@ -12,14 +14,23 @@ $log_file = ('{0}\raddarr_powershell.log') -f ($PSScriptRoot)
 
 if ($env:radarr_eventtype -eq $expected_eventtype) {
   ('{0} - In expected event ''' + $expected_eventtype + '''') -f (Get-Date) | Out-File -FilePath $log_file -Append
-  ('{0} - File size ''' + $env:radarr_release_size + '''') -f (Get-Date) | Out-File -FilePath $log_file -Append
 
-  for ( $index = 0; $index -lt $release_groups.count; $index++)
-  {
-      if ($env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($release_groups[$index])) -And $env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($quality))) {
-        ('{0} - Release group ''' + $release_groups[$index] + ''' found') -f (Get-Date) | Out-File -FilePath $log_file -Append
+  for ( $release_group = 0; $release_group -lt $release_groups.count; $release_group++) {
+    for ( $quality = 0; $quality -lt $qualities.count; $quality++) {
+      if ($env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($release_groups[$release_group])) -And $env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($qualities[$quality]))) {
+        ('{0} - Release group ''' + $release_groups[$release_group] + ''' found') -f (Get-Date) | Out-File -FilePath $log_file -Append
         $doApiCall = $true;
       }
+    }
+  }
+
+  for ( $release_group_optional = 0; $release_group_optional -lt $release_groups_optional.count; $release_group_optional++) {
+    for ( $quality_optional = 0; $quality_optional -lt $qualities_optional.count; $quality_optional++) {
+      if ($env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($release_groups_optional[$release_group_optional])) -And $env:radarr_moviefile_relativepath -like ('*{0}*' -f [WildcardPattern]::Escape($qualities_optional[$quality_optional]))) {
+        ('{0} - Release group optional ''' + $release_groups_optional[$release_group_optional] + ''' found') -f (Get-Date) | Out-File -FilePath $log_file -Append
+        $doApiCall = $true;
+      }
+    }
   }
 
   if ($doApiCall) {
